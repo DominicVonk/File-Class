@@ -96,13 +96,29 @@ class File {
 		$nfilename .= DIRECTORY_SEPARATOR . $newfilename;
 		return rename($filename, $nfilename);
 	}
-	public static function copy($filename, $newfilename) {
-		return copy($filename, $newfilename);
+	public static function copy($filename, $newlocation) {
+		if (stripos($filename, DIRECTORY_SEPARATOR) !== 0) {
+			$filename = getcwd() . DIRECTORY_SEPARATOR . $filename;
+		}
+		$filename = self::getAbsolutePath($filename);
+		if (stripos($newlocation, DIRECTORY_SEPARATOR) !== 0) {
+			$newlocation = getcwd() . DIRECTORY_SEPARATOR . $newlocation;
+		}
+		$newlocation =  self::getAbsolutePath($newlocation);
+		return copy($filename, $newlocation);
 	}
 	public static function delete($filename) {
+		if (stripos($filename, DIRECTORY_SEPARATOR) !== 0) {
+			$filename = getcwd() . DIRECTORY_SEPARATOR . $filename;
+		}
+		$filename = self::getAbsolutePath($filename);
 		return unlink ($filename);
 	}
 	public static function exists($filename) {
+		if (stripos($filename, DIRECTORY_SEPARATOR) !== 0) {
+			$filename = getcwd() . DIRECTORY_SEPARATOR . $filename;
+		}
+		$filename = self::getAbsolutePath($filename);
 		return file_exists($filename);
 	}
 }
