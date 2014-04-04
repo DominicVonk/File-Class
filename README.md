@@ -2,7 +2,7 @@ File-Class
 ==========
 A easy way of using files in php
 
-## Howto use it? easy way
+## A small preview
 ```php
 <?php
   require ('File.php');
