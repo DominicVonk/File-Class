@@ -25,7 +25,7 @@ class File {
 	        }
 	        return '/' . implode(DIRECTORY_SEPARATOR, $absolutes);
 	}
-	function __construct($filename, $append = false) {
+	function __construct($filename) {
 		set_error_handler(array($this, 'fileReportingError'));
 		if (stripos($filename, DIRECTORY_SEPARATOR) === 0) {
 			$this->filename = $filename;
@@ -33,7 +33,6 @@ class File {
 			$this->filename = getcwd() . DIRECTORY_SEPARATOR . $filename;
 		}
 		$this->filename =  self::getAbsolutePath($this->filename);
-		$this->append = $append;
 		if (file_exists($this->filename)) {
 			$content = file_get_contents($this->filename);
 		}
@@ -57,28 +56,19 @@ class File {
 		return $this->{strtolower($var)};
 	}
 	public function __unset($var) {
-		$this->{strtolower($var)} = $oldcontent;
+		$this->{strtolower($var)} = $this->oldcontent;
+		$this->saved = false;
 	}
 	public function __isset($var) {
 		return (isset($this->{strtolower($var)}));
 	}
 	public function save() { 
-		if ($this->append) {
-			file_put_contents($this->filename, $this->content, FILE_APPEND);
-		}
-		else {
-			file_put_contents($this->filename, $this->content);
-		}
+		file_put_contents($this->filename, $this->content);
 		$this->saved = true;
 	}
 	public function __destruct() {
 		if (!$this->saved) {
-			if ($this->append) {
-				file_put_contents($this->filename, $this->content, FILE_APPEND);
-			}
-			else {
-				file_put_contents($this->filename, $this->content);
-			}
+			file_put_contents($this->filename, $this->content);
 		}
 	}
 	public static function move($filename, $newlocation) {
