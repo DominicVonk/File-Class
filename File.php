@@ -2,7 +2,7 @@
 class FileException extends ErrorException { }
 class File {
 	private $filename;
-	private $append;
+	private $autosave;
 	private $oldcontent;
 	private $content;
 	private $saved = false;
@@ -25,7 +25,7 @@ class File {
 	        }
 	        return '/' . implode(DIRECTORY_SEPARATOR, $absolutes);
 	}
-	function __construct($filename) {
+	function __construct($filename, $autosave = true) {
 		set_error_handler(array($this, 'fileReportingError'));
 		if (stripos($filename, DIRECTORY_SEPARATOR) === 0) {
 			$this->filename = $filename;
@@ -39,6 +39,7 @@ class File {
 		else {
 			$content = "";
 		}
+		$this->autosave = $autosave;
 		$this->oldcontent = $content;
 		$this->content = $content;
 	}
@@ -56,7 +57,11 @@ class File {
 		return $this->{strtolower($var)};
 	}
 	public function __unset($var) {
-		$this->{strtolower($var)} = $this->oldcontent;
+		$this->{strtolower($var)} = "";
+		$this->saved = false;
+	}
+	public function resetContent() {
+		$this->content = $this->oldcontent;
 		$this->saved = false;
 	}
 	public function __isset($var) {
@@ -67,7 +72,7 @@ class File {
 		$this->saved = true;
 	}
 	public function __destruct() {
-		if (!$this->saved) {
+		if (!$this->saved && $this->autosave) {
 			file_put_contents($this->filename, $this->content);
 		}
 	}
