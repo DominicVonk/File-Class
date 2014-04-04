@@ -1,10 +1,15 @@
-<?php
+class FileException extends ErrorException { }
 class File {
 	private $filename;
 	private $append;
 	private $oldcontent;
 	private $content;
 	private $saved = false;
+	private function fileReportingError ($err_severity, $err_msg, $err_file, $err_line) {
+		// error was suppressed with the @-operator
+   	 	if (0 === error_reporting()) { return false;}
+		throw new FileException ($err_msg, 0, $err_severity, $err_file, $err_line);
+	}
 	private static function getAbsolutePath($path) {
 	        $path = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $path);
 	        $parts = array_filter(explode(DIRECTORY_SEPARATOR, $path), 'strlen');
@@ -20,6 +25,7 @@ class File {
 	        return '/' . implode(DIRECTORY_SEPARATOR, $absolutes);
 	}
 	function __construct($filename, $append = false) {
+		set_error_handler(array($this, 'fileReportingError'));
 		if (stripos($filename, DIRECTORY_SEPARATOR) === 0) {
 			$this->filename = $filename;
 		} else {
