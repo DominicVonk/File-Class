@@ -32,6 +32,4 @@ A easy way of using files in php
   if (File::exists("../test.php")) { // Checks if file exists
     File::delete("../test.php"); // If exists delete file
   }
-  
-?>
-
+```
