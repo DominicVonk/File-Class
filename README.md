@@ -14,7 +14,7 @@ A easy way of using files in php
 ```
 
 ## All function preview
-```
+```php
 <?php
   require('File.php');
   
