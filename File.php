@@ -1,3 +1,4 @@
+<?php
 class FileException extends ErrorException { }
 class File {
 	private $filename;
