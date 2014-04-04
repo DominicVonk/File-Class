@@ -18,7 +18,7 @@ A easy way of using files in php
 <?php
   require('File.php');
   
-  $testFile = new File('test.php', true); // Creates or opens a file (append if exists).
+  $testFile = new File('test.php'); // Creates or opens a file.
   $fileContent = $testFile->Content; // Gets content of file and sets variable.
   $testFile->Content = "Bye World!"; // Set new content of the file.
   if ($testFile->Content !== $fileContent) { // Check if the content and old content are the same (if not run this)
