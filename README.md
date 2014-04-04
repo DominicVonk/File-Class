@@ -9,7 +9,7 @@ A easy way of using files in php
   
   $testFile = new File('test.php'); // Creates or opens a file.
   $testFile->Content = 'Hello World!'; // Sets Hello World! to the content.
-  // When script stops the file will be writen
+  // When script ends the file will be writen
   
 ```
 
